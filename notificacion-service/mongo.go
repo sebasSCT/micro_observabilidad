@@ -25,8 +25,8 @@ func ConnectMongo() {
 	mongoDB := os.Getenv("MONGO_DB")
 
 	//mongodb://root:example@localhost:27017
-	uri := "mongodb://" + mongoUser + ":" + mongoPassword + "@" + mongoHost + ":" + mongoPort + "/" + mongoDB
-
+	uri := "mongodb://" + mongoUser + ":" + mongoPassword + "@" + mongoHost + ":" + mongoPort
+	log.Println(uri)
 	clientOptions := options.Client().ApplyURI(uri)
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
