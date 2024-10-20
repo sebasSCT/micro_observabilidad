@@ -20,6 +20,7 @@ func main() {
 	r := gin.Default()
 	r.POST("/send", SendNotification)
 	r.GET("/notifications", GetAllNotifications)
+	r.GET("/notification/:id", GetNotification)
 
 	// Iniciar el servidor en un goroutine
 	go func() {

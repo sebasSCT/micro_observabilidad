@@ -111,3 +111,43 @@ func GetAllNotifications(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, notifications)
 }
+
+func GetNotification(c *gin.Context) {
+	id := c.Param("id")
+	notification, err := GetNotificationByID(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch notification"})
+		return
+	}
+
+	if notification == nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Notification not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, notification)
+}
+
+func GetNotificationByID(id string) (bson.M, error) {
+	// Convertir el ID a ObjectID
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		log.Println("Invalid ID format:", err)
+		return nil, err
+	}
+
+	// Buscar el documento en la colección
+	var notification bson.M
+	filter := bson.M{"_id": objID}
+	err = notificationCollection.FindOne(context.Background(), filter).Decode(&notification)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			// Manejo del caso donde no se encuentra el documento
+			return nil, nil
+		}
+		log.Println("Error fetching notification:", err)
+		return nil, err
+	}
+
+	return notification, nil
+}
