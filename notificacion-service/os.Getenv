@@ -1,0 +1,31 @@
+package config
+
+import (
+	"os"
+)
+
+type Config struct {
+	MongoHost     string
+	MongoPort     string
+	MongoUser     string
+	MongoPassword string
+	MongoDB       string
+	RabbitMQHost  string
+	RabbitMQPort  string
+	RabbitMQUser  string
+	RabbitMQPass  string
+}
+
+func GetConfig() *Config {
+	return &Config{
+		MongoHost:     os.Getenv("MONGO_HOST"),
+		MongoPort:     os.Getenv("MONGO_PORT"),
+		MongoUser:     os.Getenv("MONGO_USER"),
+		MongoPassword: os.Getenv("MONGO_PASSWORD"),
+		MongoDB:       os.Getenv("MONGO_DB"),
+		RabbitMQHost:  os.Getenv("RABBITMQ_HOST"),
+		RabbitMQPort:  os.Getenv("RABBITMQ_PORT"),
+		RabbitMQUser:  os.Getenv("RABBITMQ_USER"),
+		RabbitMQPass:  os.Getenv("RABBITMQ_PASS"),
+	}
+}

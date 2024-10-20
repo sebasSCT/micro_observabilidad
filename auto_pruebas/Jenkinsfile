@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar código') {
+            steps {
+                git 'https://github.com/sebasSCT/micro_auto_pruebas.git'
+            }
+        }
+
+        stage('Instalar dependencias') {
+            steps {
+
+                sh 'npm install'
+            }
+        }
+
+        stage('Ejecutar pruebas') {
+            steps {
+
+                sh 'npm test'
+            }
+        }
+
+        stage('Generar Reportes') {
+            steps {
+
+                sh 'npm run generate-report'
+            }
+        }
+    }
+
+    post {
+        always {
+
+            archiveArtifacts artifacts: '**/output/cucumber_report.html', allowEmptyArchive: true
+        }
+        success {
+            echo 'Las pruebas se ejecutaron con éxito'
+        }
+        failure {
+            echo 'Las pruebas fallaron'
+        }
+    }
+}

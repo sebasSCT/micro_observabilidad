@@ -1,0 +1,22 @@
+{
+  "name": "pruebas",
+  "version": "1.0.0",
+  "description": "pruebas automatizadas",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^9.0.1",
+    "ajv": "^8.17.1",
+    "axios": "^1.7.7",
+    "cucumber-html-reporter": "^7.1.1",
+    "pruebas": "file:"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.0.0",
+    "jest": "^29.7.0"
+  }
+}

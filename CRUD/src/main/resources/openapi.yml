@@ -1,0 +1,521 @@
+openapi: 3.0.0
+info:
+  title: API de Gestión de Usuarios
+  version: 1.0.0
+  description: API para gestionar usuarios, incluyendo registro, login,cambio de contraseña y operaciones CRUD
+
+paths:
+  /api/auth/usuarios/login:
+    post:
+      summary: Iniciar sesión
+      description: Autentica un usuario y devuelve un token JWT o si el caso un mensaje de error
+      tags:
+        - Autenticación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDTO'
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenDTO'
+        '400':
+          description: Datos de entrada incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '403':
+          description: Usuario inactivo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+
+  /api/auth/usuarios:
+    post:
+      summary: Registrar nuevo usuario
+      description: Crea un nuevo usuario en el sistema
+      tags:
+        - Autenticación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistroUsuarioDTO'
+      responses:
+        '201':
+          description: Usuario registrado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '400':
+          description: Datos de registro inválidos o incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '409':
+          description: El usuario ya existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+
+  /api/auth/usuarios/password{codigo}:
+    patch:
+      summary: Cambiar contraseña
+      description: Cambia la contraseña de un usuario existente
+      tags:
+        - Autenticación
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: codigo
+          required: true
+          schema:
+            type: string
+          description: Código del usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CambioPasswordDTO'
+      responses:
+        '200':
+          description: Contraseña actualizada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '400':
+          description: Datos de cambio de contraseña inválidos o incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+
+  /api/usuarios/{codigo}:
+    put:
+      summary: Actualizar perfil de usuario
+      description: Actualiza la información del perfil de un usuario existente
+      tags:
+        - Usuario
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: codigo
+          required: true
+          schema:
+            type: string
+          description: Código del usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActualizarUsuarioDTO'
+      responses:
+        '200':
+          description: Usuario actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetalleUsuarioDTO'
+        '400':
+          description: Datos de actualización inválidos o incompletos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '409':
+          description: Usuario ya existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+
+
+    delete:
+      summary: Eliminar cuenta de usuario
+      description: Elimina la cuenta de un usuario del sistema
+      tags:
+        - Usuario
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: codigo
+          required: true
+          schema:
+            type: string
+          description: Código del usuario a eliminar
+      responses:
+        '200':
+          description: Usuario eliminado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '403':
+          description: Usuario inactivo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+
+    get:
+      summary: Obtener detalles de usuario
+      description: Obtiene los detalles de un usuario específico
+      tags:
+        - Usuario
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: codigo
+          required: true
+          schema:
+            type: string
+          description: Código del usuario
+      responses:
+        '200':
+          description: Detalles de usuario obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetalleUsuarioDTO'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+
+  /api/general/usuarios:
+    get:
+      summary: Listar todos los usuarios
+      description: Obtiene una lista paginada de los usuarios registrados en el sistema
+      tags:
+        - General
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          description: Número de página
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 10
+          description: Tamaño de la página
+      responses:
+        '200':
+          description: Lista de usuarios obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageItemUsuarioDTO'
+        '404':
+          description: No se encontraron usuarios
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+
+  /api/general/email/password/{email}:
+    get:
+      summary: Enviar un email
+      description: Envía un email al usuario que pidió recuperar la contraseña el cual devuelve un token
+      tags:
+        - General
+      parameters:
+        - in: path
+          name: email
+          schema:
+            type: string
+          description: Email del usuario
+      responses:
+        '200':
+          description: Email enviado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '400':
+          description: Formato de correo electrónico inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '404':
+          description: Correo electrónico no encontrado en la base de datos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '429':
+          description: Límite de envío de correos alcanzado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+        '503':
+          description: Servidor de correo no disponible
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeDTO'
+
+components:
+  schemas:
+
+    MensajeDTO:
+      type: object
+      properties:
+        error:
+          type: boolean
+        respuesta:
+          type: T
+        required:
+          - error
+          - respuesta
+
+    LoginDTO:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    TokenDTO:
+      type: object
+      properties:
+        token:
+          type: string
+
+    RegistroUsuarioDTO:
+      type: object
+      properties:
+        nombre:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - nombre
+        - email
+        - password
+
+    CambioPasswordDTO:
+      type: object
+      properties:
+        nuevaPassword:
+          type: string
+      required:
+        - nuevaPassword
+
+    ActualizarUsuarioDTO:
+      type: object
+      properties:
+        nombre:
+          type: string
+        email:
+          type: string
+      required:
+        - nombre
+        - email
+
+    DetalleUsuarioDTO:
+      type: object
+      properties:
+        codigo:
+          type: string
+        nombre:
+          type: string
+        email:
+          type: string
+
+    PageItemUsuarioDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemUsuarioDTO'
+        pageable:
+          type: object
+          properties:
+            sort:
+              type: object
+              properties:
+                empty:
+                  type: boolean
+                sorted:
+                  type: boolean
+                unsorted:
+                  type: boolean
+            pageNumber:
+              type: integer
+            pageSize:
+              type: integer
+            offset:
+              type: integer
+            paged:
+              type: boolean
+            unpaged:
+              type: boolean
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        last:
+          type: boolean
+        size:
+          type: integer
+        number:
+          type: integer
+        sort:
+          type: object
+          properties:
+            empty:
+              type: boolean
+            sorted:
+              type: boolean
+            unsorted:
+              type: boolean
+        numberOfElements:
+          type: integer
+        first:
+          type: boolean
+        empty:
+          type: boolean
+
+    ItemUsuarioDTO:
+      type: object
+      properties:
+        codigo:
+          type: string
+        nombre:
+          type: string
+        email:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

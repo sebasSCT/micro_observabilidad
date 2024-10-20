@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "60b80392-9b16-4dee-acc7-603c84d2f0ae",
+		"name": "Pruebas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36553048"
+	},
+	"item": [
+		{
+			"name": "inicio de sesion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"hola@gmail\",\r\n    \"password\": \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8084/api/auth/usuarios/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8084",
+					"path": [
+						"api",
+						"auth",
+						"usuarios",
+						"login"
+					]
+				}
+			},
+			"response": [],
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Verificar que la respuesta es exitosa (código 200)",
+							"pm.test('Login exitoso', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"// Extraer el token de la respuesta",
+							"var jsonResponse = pm.response.json();",
+							"if (jsonResponse.respuesta && jsonResponse.respuesta.token) {",
+							"    pm.environment.set('authToken', jsonResponse.respuesta.token);",
+							"    console.log('Token guardado:', jsonResponse.respuesta.token);",
+							"} else {",
+							"    pm.test('Token no encontrado en la respuesta', function () {",
+							"        pm.expect(jsonResponse.respuesta.token).not.to.be.undefined;",
+							"    });",
+							"}"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "inicio fallido",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"hola@gmail\",\r\n    \"password\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8084/api/auth/usuarios/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8084",
+					"path": [
+						"api",
+						"auth",
+						"usuarios",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listar-usuarios",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8084/api/general/usuarios",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8084",
+					"path": [
+						"api",
+						"general",
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "eliminar usuario",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8084/api/usuarios/66e979413878b45a690c7208",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8084",
+					"path": [
+						"api",
+						"usuarios",
+						"66e979413878b45a690c7208"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	}
+}
