@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'app-crud'
+    static_configs:
+      - targets: ['app-crud:8084']
+
+rule_files:
+  - '/etc/prometheus/alert.rules.yml' 

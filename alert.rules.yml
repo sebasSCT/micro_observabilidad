@@ -1,0 +1,11 @@
+groups:
+  - name: MicroservicesAlerts
+    rules:
+    - alert: CRUDServiceDown
+      expr: up{job="app-crud"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "El servicio CRUD está caído"
+        description: "No se ha recolectado métricas del servicio CRUD en más de 1 minuto."
