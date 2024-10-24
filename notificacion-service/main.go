@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -19,7 +20,7 @@ func main() {
 	// Configurar API para notificaciones
 	r := gin.Default()
 	r.POST("/send", SendNotification)
-	r.GET("/notifications", GetAllNotifications)
+	r.GET("/notification", GetAllNotifications)
 	r.GET("/notification/:id", GetNotification)
 
 	// Iniciar el servidor en un goroutine

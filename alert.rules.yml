@@ -1,6 +1,8 @@
 groups:
   - name: MicroservicesAlerts
     rules:
+  
+  # Alerta para app-crud
     - alert: CRUDServiceDown
       expr: up{job="app-crud"} == 0
       for: 1m
@@ -9,3 +11,73 @@ groups:
       annotations:
         summary: "El servicio CRUD está caído"
         description: "No se ha recolectado métricas del servicio CRUD en más de 1 minuto."
+  
+  # Alerta para app-autenticacion
+    - alert: AuthServiceDown
+      expr: up{job="app-autenticacion"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "El servicio de autenticación está caído"
+        description: "No se ha recolectado métricas del servicio de autenticación en más de 1 minuto."
+
+    # Alerta para app-notificaciones
+    - alert: NotificationServiceDown
+      expr: up{job="app-notificaciones"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "El servicio de notificaciones está caído"
+        description: "No se ha recolectado métricas del servicio de notificaciones en más de 1 minuto."
+
+    # Alerta para rabbitmq
+    - alert: RabbitMQServiceDown
+      expr: up{job="rabbitmq"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "El servicio RabbitMQ está caído"
+        description: "No se ha recolectado métricas del servicio RabbitMQ en más de 1 minuto."
+
+    # Alerta para mongo_database
+    - alert: MongoDBServiceDown
+      expr: up{job="mongo_database"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "El servicio MongoDB está caído"
+        description: "No se ha recolectado métricas del servicio MongoDB en más de 1 minuto."
+
+    # Alerta para mongo-express
+    - alert: MongoExpressServiceDown
+      expr: up{job="mongo-express"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "El servicio Mongo Express está caído"
+        description: "No se ha recolectado métricas del servicio Mongo Express en más de 1 minuto."
+
+    # Alerta para loki
+    - alert: LokiServiceDown
+      expr: up{job="loki"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "El servicio Loki está caído"
+        description: "No se ha recolectado métricas del servicio Loki en más de 1 minuto."
+
+    # Alerta para grafana
+    - alert: GrafanaServiceDown
+      expr: up{job="grafana"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "El servicio Grafana está caído"
+        description: "No se ha recolectado métricas del servicio Grafana en más de 1 minuto."
