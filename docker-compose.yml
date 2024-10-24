@@ -126,3 +126,10 @@ services:
       - "9093:9093"
     volumes:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+  
+  mongodb_exporter:
+    image: bitnami/mongodb-exporter:latest
+    environment:
+      MONGODB_URI: mongodb://root:example@mongo_database:27017
+    ports:
+      - "9216:9216"
