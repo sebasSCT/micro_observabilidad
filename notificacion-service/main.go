@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"os"
 	"os/signal"
@@ -22,6 +23,9 @@ func main() {
 	r.POST("/send", SendNotification)
 	r.GET("/notification", GetAllNotifications)
 	r.GET("/notification/:id", GetNotification)
+
+	// Agregar ruta de métricas en el mismo servidor
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	// Iniciar el servidor en un goroutine
 	go func() {
